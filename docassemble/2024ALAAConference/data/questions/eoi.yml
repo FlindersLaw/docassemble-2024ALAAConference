@@ -1,0 +1,127 @@
+# Expression of interest form
+---
+objects:
+  - registrant: Individual
+  - EOIchannel: Individual
+  - EOIcc: Individual
+---
+features:
+  css: styles.css
+  debug: False
+  navigation back button: False
+  hide standard menu: True
+---
+# These next two blocks set the logo and size it.
+objects:
+  - theLogo: DAStaticFile.using(filename='alaa_logo.webp')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + theLogo.url_for() + '" style="height: 35px;">')
+---
+# Constants
+code: |
+  # This is the email address for the 'Expression of Interest' channel
+  # in the ALAA Conference 2024 Organizing Committee Team
+  EOIchannel.name = "Expression of Interest"
+  EOIchannel.email = '68bb4861.FLINDERS.onmicrosoft.com@au.teams.ms'
+
+  EOIcc.name = "Mark Ferraretto"
+  EOIcc.email = "mark.ferraretto@flinders.edu.au"
+
+  # URL to our conference website
+  conf_website = 'https://yellow-desert-05ae1bd00.5.azurestaticapps.net/'
+
+  # CFP date
+  cfp_date = '7 April 2024'
+---
+mandatory: True
+question: Expression of Interest
+subquestion: |
+  Registrations for the 2024 ALAA Conference open soon!
+
+  Please register your interest in attending the 2024 ALAA Conference here.
+  We will notify you as soon as registrations open
+fields:
+  - First Name: registrant.name.first
+  - Last Name: registrant.name.last
+  - Email: registrant.email
+  - Institution / Company: registrant.company
+  - Role: registrant.role
+  - Have you already submitted an abstract?: registrant.submitted
+    datatype: yesnoradio
+  - Are you considering submitting an abstract?: registrant.considering
+    datatype: yesnoradio
+    show if:
+      variable: registrant.submitted
+      is: False
+  - Do you have any questions?: Aquestions
+    input type: area
+    required: False
+
+---
+mandatory: True
+code: |
+  # We'll drive the app here
+  if send_email( to=EOIchannel, template=eoi_email, sender=registrant ):
+    final_screen
+  else:
+    error_screen
+---
+event: final_screen
+question: Thanks for Your Interest
+subquestion: |
+  Thanks for registering your interest.  We will contact you
+  as soon as registrations open.
+
+  %if not registrant.submitted and registrant.considering:
+  #### Submission of Abstracts
+  The Call for Papers has already been issued for the ALAA 2024 Conference.
+  Abstracts are due by **${cfp_date}**.
+
+  If you would like to submit your abstract please send it by email to
+  <a href="mailto:admin@alaa.asn.au">admin@alaa.asn.au</a>.
+  %endif
+
+  ### Your Information
+  ${eoi_content}
+buttons:
+  - Exit: exit
+    url: ${conf_website}
+  - Restart: restart
+---
+event: error_screen
+question: Problem Encountered
+subquestion: |
+  For some reason we weren't able to receive your enquiry.  Please contact 
+  <a href="mailto:${EOIcc.email}">the project team</a>.
+
+  ### Your information
+  ${eoi_content}
+---
+template: eoi_email
+subject: Expression of Interest - ${registrant}
+content: |
+  # Expression of Interest
+  ## ${registrant}
+
+  ${eoi_content}
+---
+template: eoi_content
+content: |
+
+  Label|Description
+  ---|---
+  Name|${registrant.name}
+  Email|${registrant.email}
+  Institution / Company|${registrant.company}
+  Submitted Abstract|${registrant.submitted}
+  %if not registrant.submitted:
+  Intends to submit abstract|${registrant.considering}
+  %endif
+  %if Aquestions != '':
+  Questions|${Aquestions}
+  %else:
+  Questions|N/A
+  %endif
+---

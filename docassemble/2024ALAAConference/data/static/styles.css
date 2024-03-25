@@ -1,0 +1,93 @@
+.navbar{
+    background-color: whitesmoke !important;
+}
+
+/* This sets the colour of the 'Source' link in the navbar */
+/* .navbar .nav-item a{
+    color: rgb(255,211,0) !important;
+}
+*/
+
+/* dropdown-menu manages the right-hand menu (where we access the Playground
+   amongst other things) */
+/* .navbar .dropdown-menu{ */
+    /*  the rgba() function works just like rgb in that
+        it sets a colour.  But the fourth element sets an
+        'alpha' or transaparency value.  Here we are saying
+        to set the transparency to 30%
+    */
+/*    background-color: rgba(1,28,44,0.8);*/
+/* } */
+/* Sets properties for when hovering over a menu item in the 
+   drop-down menu */
+/* .dropdown-item:hover{
+    background-color: rgba(1,28,44,0.3);
+}
+*/
+
+/* Sets the appearnce for the 'Continue' button... */
+.btn-primary{
+  color: rgb(255,255,255);
+  background-color: rgb(0, 45, 97);
+  border-color: rgb(0,0,0);
+}
+/* ...and when hovering over it */
+.btn-primary:hover{
+  color: rgb(0,0,0);
+  background-color: rgba(151,201,255,0.3);
+  border-color: rgb(0,0,0);
+}
+
+.dabody {
+    font-family: 'Droid', sans-serif;
+}
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+}
+
+h4 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Place a Flinders logo in the bottom right corner
+   Set background colour to a pale version of Flinders Yellow
+*/
+.dabody {
+    background-color: rgba(255,239,162, 0.2);
+    background-image: url("Flinders_University_Logo_New.png");
+    background-repeat: no-repeat;
+    background-position: 98% 98%;
+    background-attachment: fixed;
+    background-size: 10%;
+}
+
+/* Licence for viewing software to be displayed on right side
+   with smaller text
+   Use a pair of DIVs so we can offset the licence from the top
+   of the page
+*/
+#MJFLicenceOuter {
+    margin: auto;
+    overflow: visible;
+}
+#MJFLicenceInner {
+    margin-top: 120px;
+    background-color: rgba(255,239,162, 0.4);
+    line-height: 1.1;
+    font-size: 0.9em;
+}
+
+.MJFLicenceHeader {
+    font-weight: bolder;
+}
+
+#my-table tr:nth-child(even) {
+  background-color: rgba(0,0,0,0.03); /* Set the background color for even rows */
+}
+#my-table .no-band {
+  background-color: rgba(0,0,0,0.1); /* Reset the background color for specific rows */
+}
