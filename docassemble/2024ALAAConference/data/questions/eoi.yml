@@ -55,6 +55,12 @@ fields:
     show if:
       variable: registrant.submitted
       is: False
+  - Do you intend to attend the Gala Dinner on 4 July?: Adinner
+    datatype: radio
+    choices:
+      - Yes
+      - No
+      - Unsure
   - Do you have any questions?: Aquestions
     input type: area
     required: False
@@ -119,6 +125,7 @@ content: |
   %if not registrant.submitted:
   Intends to submit abstract|${registrant.considering}
   %endif
+  Attend Gala Dinner|${Adinner}
   %if Aquestions != '':
   Questions|${Aquestions}
   %else:
