@@ -24,8 +24,7 @@ code: |
   # This is the email address for the 'Expression of Interest' channel
   # in the ALAA Conference 2024 Organizing Committee Team
   EOIchannel.name = "Expression of Interest"
-  EOIchannel.email = '68bb4861.FLINDERS.onmicrosoft.com@au.teams.ms'
-
+  EOIchannel.email = '4195e4a3.FLINDERS.onmicrosoft.com@au.teams.ms'
   EOIcc.name = "Mark Ferraretto"
   EOIcc.email = "mark.ferraretto@flinders.edu.au"
 
@@ -69,7 +68,7 @@ fields:
 mandatory: True
 code: |
   # We'll drive the app here
-  if send_email( to=EOIchannel, template=eoi_email, sender=registrant ):
+  if send_email( to=EOIchannel, template=eoi_email ):
     final_screen
   else:
     error_screen
@@ -104,6 +103,10 @@ subquestion: |
 
   ### Your information
   ${eoi_content}
+buttons:
+  - Exit: exit
+    url: ${conf_website}
+  - Restart: restart
 ---
 template: eoi_email
 subject: Expression of Interest - ${registrant}
