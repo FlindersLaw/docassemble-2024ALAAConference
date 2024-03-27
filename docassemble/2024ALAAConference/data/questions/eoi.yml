@@ -25,6 +25,8 @@ code: |
   # in the ALAA Conference 2024 Organizing Committee Team
   EOIchannel.name = "Expression of Interest"
   EOIchannel.email = '4195e4a3.FLINDERS.onmicrosoft.com@au.teams.ms'
+  # For testing
+  # EOIchannel.email = "mark.ferraretto@flinders.edu.au"
   EOIcc.name = "Mark Ferraretto"
   EOIcc.email = "mark.ferraretto@flinders.edu.au"
 
@@ -47,19 +49,17 @@ fields:
   - Email: registrant.email
   - Institution / Company: registrant.company
   - Role: registrant.role
-  - Have you already submitted an abstract?: registrant.submitted
-    datatype: yesnoradio
+  - Please select all that apply: Ainfo
+    datatype: checkboxes
+    choices:
+      - I intend to attend the ALAA 2024 Conference: attend_conference
+      - I have already submitted an abstract: submitted_abstract
+      - I intend to attend the Gala Dinner on 4 July: attend_dinner
   - Are you considering submitting an abstract?: registrant.considering
     datatype: yesnoradio
     show if:
-      variable: registrant.submitted
+      variable: Ainfo['submitted_abstract']
       is: False
-  - Do you intend to attend the Gala Dinner on 4 July?: Adinner
-    datatype: radio
-    choices:
-      - Yes
-      - No
-      - Unsure
   - Do you have any questions?: Aquestions
     input type: area
     required: False
@@ -79,7 +79,7 @@ subquestion: |
   Thanks for registering your interest.  We will contact you
   as soon as registrations open.
 
-  %if not registrant.submitted and registrant.considering:
+  %if not Ainfo['submitted_abstract'] and registrant.considering:
   #### Submission of Abstracts
   The Call for Papers has already been issued for the ALAA 2024 Conference.
   Abstracts are due by **${cfp_date}**.
@@ -124,14 +124,56 @@ content: |
   Name|${registrant.name}
   Email|${registrant.email}
   Institution / Company|${registrant.company}
-  Submitted Abstract|${registrant.submitted}
-  %if not registrant.submitted:
-  Intends to submit abstract|${registrant.considering}
-  %endif
-  Attend Gala Dinner|${Adinner}
-  %if Aquestions != '':
-  Questions|${Aquestions}
-  %else:
-  Questions|N/A
-  %endif
+  Attendee Information|${display_info}
+  % if Aquestions:
+  Other questions|${Aquestions}
+  % else:
+  Other questions|N/A
+  % endif
+---
+template: conference_questions
+content: |
+  % if Ainfo['attend_conference']:
+  * Intends to attend conference
+  % else:
+  * Does not intend to attend conference
+  % endif
+  % if Ainfo['submitted_abstract']:
+  * Has submitted abstract
+  % else:
+  * Has not submitted abstract
+    % if registrant.considering:
+  * Considering submitting abstract
+    % else:
+  * Not considering submitting abstract
+    % endif
+  % endif
+  % if Ainfo['attend_dinner']:
+  * Intends to attend Gala Dinner
+  % else:
+  * Does not intend to attend Gala Dinner
+  % endif
+---
+code: |
+  display_info = '<ul>'
+  if Ainfo['attend_conference']:
+    display_info = display_info + '<li>Intends to attend conference</li>'
+  else:
+    display_info = display_info + '<li>Does not intend to attend conference</li>'
+
+  if Ainfo['submitted_abstract']:
+    display_info = display_info + '<li>Has submitted abstract</li>'
+  else:
+    display_info = display_info + '<li>Has not submitted abstract</li>'
+    if registrant.considering:
+      display_info = display_info + '<li>Considering submitting abstract</li>'
+    else:
+      display_info = display_info + '<li>Not considering submitting abstract</li>'
+  
+  if Ainfo['attend_dinner']:
+    display_info = display_info + '<li>Intends to attend Gala Dinner</li>'
+  else:
+    display_info = display_info + '<li>Does not intend to attend Gala Dinner</li>'
+
+  display_info = display_info + '</ul>'
 ---
