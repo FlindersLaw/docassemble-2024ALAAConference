@@ -1,0 +1,147 @@
+# Early Career Academic Registration Form
+# 
+# NOTE: I copied eoi.yml to create this.  There's lots of repeated information
+# and it's not very elegant.  Please keep this in mind.
+---
+objects:
+  - registrant: Individual
+  - ECAchannel: Individual
+  - ECAcc: Individual
+---
+features:
+  css: styles.css
+  debug: False
+  navigation back button: False
+  hide standard menu: True
+---
+# These next two blocks set the logo and size it.
+objects:
+  - theLogo: DAStaticFile.using(filename='alaa_logo.webp')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + theLogo.url_for() + '" style="height: 35px;">')
+---
+# Constants
+code: |
+  # This is the email address for the 'Expression of Interest' channel
+  # in the ALAA Conference 2024 Organizing Committee Team
+  ECAchannel.name = "Expression of Interest"
+  ECAchannel.email = '2f9e0ae5.FLINDERS.onmicrosoft.com@au.teams.ms'
+  # For testing
+  # ECAchannel.email = "mark.ferraretto@flinders.edu.au"
+  ECAcc.name = "Mark Ferraretto"
+  ECAcc.email = "mark.ferraretto@flinders.edu.au"
+
+  # URL to our conference website
+  conf_website = 'https://conference.alaa2024.au'
+
+  # CFP date
+  cfp_date = '7 April 2024'
+---
+mandatory: True
+question: Early Career Academic Day Registration
+subquestion: |
+  The ECA day will take place on the afternoon of **3 July 2024**.  Please visit
+  the [ALAA 2024 Conference website](https://conference.alaa2024.au) for more information.
+
+  Early career academics may attend the ECA day for free.  Other academics may also attend
+  the ECA day but [must register](https://conference.alaa2024.au/registration) for the 
+  Conference.
+
+  Early career academics are welcome to attend the Gala Dinner on **4 July 2024**. Please
+  [register](https://conference.alaa2024.au/registration) if would like to attend.
+
+  **Note:** An early career academic is someone who has held an academic position
+  at any tertiary institution for a period of not more than five (5) years.
+fields:
+  - First Name: registrant.name.first
+  - Last Name: registrant.name.last
+  - Email: registrant.email
+  - Institution / Company: registrant.company
+  - Role: registrant.role
+  - Are you an early career academic?: Ainfo
+    datatype: yesnoradio
+---
+mandatory: True
+code: |
+  # We'll drive the app here
+  if channel_email:
+    receipt_email
+    final_screen
+  else:
+    error_screen
+---
+# Sends email to the channel
+code: |
+  channel_email = send_email( to=ECAchannel, template=eoi_email )
+---
+# Sends email receipt
+code: |
+  receipt_email = send_email(to=registrant, template=eoi_email)
+---
+event: final_screen
+question: Registration Accepted
+subquestion: |
+  Thanks for registering. You are now registered for the ECA Day to be held on **July 3 2024**.
+
+  A copy of this registration receipt has been emailed to you. Please bring this
+  receipt with you to the ECA Day.
+
+  For information on the ECA Day including the Day's program please visit the
+  [conference website](https://conference.alaa2024.au/).
+
+  %if not Ainfo:
+  As you are not an early career academic please make sure that
+  you [**register**](https://conference.alaa2024.au/registration)
+  for the ALAA 2024 Conference.
+  %endif
+
+  ### Your Information
+  ${eoi_content}
+buttons:
+  - Exit: exit
+    url: ${conf_website}
+---
+event: error_screen
+question: Problem Encountered
+subquestion: |
+  For some reason we weren't able to receive your enquiry.  Please contact 
+  <a href="mailto:${ECAcc.email}">the project team</a>.
+
+  ### Your information
+  ${eoi_content}
+buttons:
+  - Exit: exit
+    url: ${conf_website}
+  - Restart: restart
+---
+template: eoi_email
+subject: ECA Day Registration - ${registrant}
+content: |
+  ${eoi_content}
+---
+template: eoi_content
+content: |
+
+  Label|Description
+  ---|---
+  Name|${registrant.name}
+  Email|${registrant.email}
+  Institution / Company|${registrant.company}
+  ECA Status|${display_info}
+---
+template: conference_questions
+content: |
+  % if Ainfo:
+  Is an early career academic
+  % else:
+  Is not an early career academic
+  % endif
+---
+code: |
+  if Ainfo:
+    display_info = 'Is an early career academic'
+  else:
+    display_info = 'Is not an early career academic'
+---

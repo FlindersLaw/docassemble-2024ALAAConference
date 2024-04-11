@@ -31,10 +31,10 @@ code: |
   EOIcc.email = "mark.ferraretto@flinders.edu.au"
 
   # URL to our conference website
-  conf_website = 'https://yellow-desert-05ae1bd00.5.azurestaticapps.net/'
+  conf_website = 'https://conference.alaa2024.au'
 
   # CFP date
-  cfp_date = '7 April 2024'
+  cfp_date = '22 April 2024'
 ---
 mandatory: True
 question: Expression of Interest
