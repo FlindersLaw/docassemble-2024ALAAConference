@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.2024ALAAConference',
-      version='1.0',
+      version='1.1',
       description=('Process automation for the 2024 ALAA conference website'),
       long_description='Process automation for the 2024 ALAA conference website',
       long_description_content_type='text/markdown',
